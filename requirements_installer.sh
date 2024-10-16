@@ -9,21 +9,36 @@ sudo apt-get update
 echo "Installing nmap..."
 sudo apt-get install -y nmap
 
-# Install testssl
-echo "Installing testssl..."
-sudo apt-get install -y testssl
+# Install testssl.sh manually
+echo "Installing testssl.sh..."
+git clone https://github.com/drwetter/testssl.sh.git
+cd testssl.sh
+chmod +x testssl.sh
+sudo ln -s $(pwd)/testssl.sh /usr/local/bin/testssl
+cd ..
 
-# Install Metasploit Framework
+# Install Metasploit Framework manually
 echo "Installing Metasploit Framework..."
-sudo apt-get install -y metasploit-framework
+curl https://raw.githubusercontent.com/rapid7/metasploit-framework/master/msfinstall > msfinstall
+chmod 755 msfinstall
+sudo ./msfinstall
+rm msfinstall
 
-# Install CrackMapExec
+# Install CrackMapExec manually
 echo "Installing CrackMapExec..."
-sudo apt-get install -y crackmapexec
+git clone --recursive https://github.com/byt3bl33d3r/CrackMapExec
+cd CrackMapExec
+pip3 install -r requirements.txt
+python3 setup.py install
+cd ..
 
-# Install SNMP-Check
+# Install SNMP-Check manually
 echo "Installing SNMP-Check..."
-sudo apt-get install -y snmp-check
+git clone https://github.com/tonimichel/snmpcheck.git
+cd snmpcheck
+chmod +x snmpcheck.py
+sudo ln -s $(pwd)/snmpcheck.py /usr/local/bin/snmp-check
+cd ..
 
 # Install Netcat (for network operations)
 echo "Installing Netcat..."
