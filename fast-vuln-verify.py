@@ -35,7 +35,7 @@ def create_ascii_banner(ascii_art):
             padding = (columns - len(line)) // 2
             centered_ascii_lines.append(' ' * padding + line)
         else:
-            centered_ascii_lines.append(line[:columns])  # Eğer ASCII metni terminal genişliğini aşarsa kes
+            centered_ascii_lines.append(line[:columns])  
 
     return '\n'.join(centered_ascii_lines)
 
@@ -92,7 +92,7 @@ def print_combined_banner():
     # Print the total number of modules available
     total_modules = colored("> ", 'red', attrs=['bold']) + str(colored(len(modules), 'cyan'))
     print("Total " + total_modules + " module(s) available")
-    print("Please use 'search' or 'use'.\n")
+    print("Please use 'list', 'search' or 'use'.\n")
 
 
 def print_table(headers, rows):
@@ -140,7 +140,7 @@ def verificationRunModule(module_id):
             if ip_address.lower().strip().startswith("search "):
                 keyword = ip_address[len("search "):].strip()
                 verificationSearch(keyword)
-                return  # Kullanıcı komutları devam etmesin
+                return  # Do not continue user commands
 
             if ip_address.lower().strip().startswith("use "):
                 keyword = ip_address[len("use "):].strip()
@@ -150,7 +150,7 @@ def verificationRunModule(module_id):
                     verificationRunModule(moduleID)
                 except ValueError:
                     print(colored("Please define a valid module ID.", 'red', attrs=['bold']))
-                return  # Kullanıcı komutları devam etmesin
+                return  # Do not continue user commands
 
             ip_list = re.split(r'[,\s]', ip_address)
             valid_ips = True
@@ -171,7 +171,7 @@ def verificationRunModule(module_id):
                 if port.lower().strip().startswith("search "):
                     keyword = port[len("search "):].strip()
                     verificationSearch(keyword)
-                    return  # Kullanıcı komutları devam etmesin
+                    return  # Do not continue user commands
                 if port.lower().strip().startswith("use "):
                     keyword = port[len("use "):].strip()
                     try:
@@ -180,7 +180,7 @@ def verificationRunModule(module_id):
                         verificationRunModule(moduleID)
                     except ValueError:
                         print(colored("Please define a valid module ID.", 'red', attrs=['bold']))
-                    return  # Kullanıcı komutları devam etmesin
+                    return  # Do not continue user commands
                 if port == "exit":
                     print(colored("\nExiting Goodbye.", 'blue', attrs=['bold']))
                     sys.exit()
@@ -215,6 +215,14 @@ def verificationRunModule(module_id):
         print(notFound.center(100, '#'))
         print("Module not found.")
 
+
+def list_modules():
+    headers = ["ID", "Title", "Description"]
+    rows = [[module["ID"], module["Title"], module["Description"]] for module in modules]
+    print_table(headers, rows)
+    print(colored("> ", 'red', attrs=['bold']) + str(colored(len(modules), 'cyan')) + " modules available.")
+
+
 def handle_command(command):
     command = command.strip().lower()
     if command == "exit":
@@ -234,7 +242,10 @@ def process_command(full_command):
         command = full_command
         keyword = None
 
-    if command == "search":
+    if command == "list":
+        list_modules()
+
+    elif command == "search":
         if keyword:
             verificationSearch(keyword)
         else:
@@ -250,7 +261,8 @@ def process_command(full_command):
         else:
             print(colored("Please specify a module ID to use.", 'red', attrs=['bold']))
     else:
-        print(colored("Invalid command. Please use 'search' or 'use'.", 'red', attrs=['bold']))
+        print(colored("Invalid command. Please use 'list', 'search' or 'use'.", 'red', attrs=['bold']))
+
 
 def main():
     try:
