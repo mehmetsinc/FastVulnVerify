@@ -4,12 +4,3 @@ urllib3
 colored
 readline
 shutil
-nmap
-testssl
-metasploit-framework
-crackmapexec
-snmp-check
-ike-scan
-netcat
-python3
-python3-pip
